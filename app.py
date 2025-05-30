@@ -10,15 +10,17 @@ from PIL import Image
 
 st.set_page_config(page_title="Détection d'Objets", layout="centered")
 
-st.title(" Détection d'Objets – Projet M1")
+st.title("🎯 Détection d'Objets – Projet M1")
 st.markdown("Choisissez un modèle, importez une image, ajustez le seuil, et observez les résultats.")
 
-model_choice = st.selectbox("🔍 Choisir un modèle", ["YOLOv8", "SSD MobileNet"])
-seuil_confiance = st.slider("🎚️ Seuil de confiance", 0.0, 1.0, 0.5, 0.05)
+# 🔘 Sélection du modèle et des paramètres
+model_choice = st.selectbox(" Choisir un modèle", ["YOLOv8", "SSD MobileNet"])
+seuil_confiance = st.slider(" Seuil de confiance", 0.0, 1.0, 0.5, 0.05)
 uploaded_file = st.file_uploader("📸 Importer une image", type=["jpg", "jpeg", "png"])
 
+# 🔍 Détection avec YOLOv8 depuis le hub Ultralytics
 def detect_yolo(image_bgr):
-    model = YOLO("yolov8n.pt")
+    model = YOLO("yolov8n")  #  téléchargement automatique du modèle
     results = model(image_bgr)[0]
     image_out = image_bgr.copy()
     for box in results.boxes.data:
@@ -32,6 +34,7 @@ def detect_yolo(image_bgr):
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
     return image_out
 
+# 🔍 Détection avec SSD MobileNet depuis TensorFlow Hub
 def detect_ssd(image_bgr):
     model = hub.load("https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2")
     image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
@@ -56,6 +59,7 @@ def detect_ssd(image_bgr):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
     return image_out
 
+# 📥 Lancement si fichier image chargé
 if uploaded_file:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image_bgr = cv2.imdecode(file_bytes, 1)
