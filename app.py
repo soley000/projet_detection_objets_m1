@@ -78,7 +78,13 @@ if uploaded_file:
     st.image(image_detected, caption=f"📌 Résultat – {model_choice}", use_column_width=True)
 
     result_pil = Image.fromarray(cv2.cvtColor(image_detected, cv2.COLOR_BGR2RGB))
-    buf = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
-    result_pil.save(buf.name)
-    with open(buf.name, "rb") as f:
-        st.download_button("📥 Télécharger le résultat", f, file_name="resultat_detection.jpg")
+    import io  
+    buffer = io.BytesIO()
+    result_pil.save(buffer, format="JPEG")
+    st.download_button(
+        label="📥 Télécharger le résultat",
+        data=buffer.getvalue(),
+        file_name="resultat_detection.jpg",
+        mime="image/jpeg"
+    )
+
