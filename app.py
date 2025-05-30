@@ -4,7 +4,6 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
 from ultralytics import YOLO
-import tempfile
 import time
 from PIL import Image
 
@@ -14,13 +13,13 @@ st.title("🎯 Détection d'Objets – Projet M1")
 st.markdown("Choisissez un modèle, importez une image, ajustez le seuil, et observez les résultats.")
 
 # 🔘 Sélection du modèle et des paramètres
-model_choice = st.selectbox(" Choisir un modèle", ["YOLOv8", "SSD MobileNet"])
-seuil_confiance = st.slider(" Seuil de confiance", 0.0, 1.0, 0.5, 0.05)
+model_choice = st.selectbox("🔍 Choisir un modèle", ["YOLOv8", "SSD MobileNet"])
+seuil_confiance = st.slider("🎚️ Seuil de confiance", 0.0, 1.0, 0.5, 0.05)
 uploaded_file = st.file_uploader("📸 Importer une image", type=["jpg", "jpeg", "png"])
 
 # 🔍 Détection avec YOLOv8 depuis le hub Ultralytics
 def detect_yolo(image_bgr):
-    model = YOLO("yolov8n")  #  téléchargement automatique du modèle
+    model = YOLO("yolov8n")  # ✅ téléchargement automatique du modèle
     results = model(image_bgr)[0]
     image_out = image_bgr.copy()
     for box in results.boxes.data:
@@ -77,14 +76,5 @@ if uploaded_file:
     st.success(f"✅ Détection terminée en {duration:.2f} secondes")
     st.image(image_detected, caption=f"📌 Résultat – {model_choice}", use_column_width=True)
 
-    result_pil = Image.fromarray(cv2.cvtColor(image_detected, cv2.COLOR_BGR2RGB))
-    import io  
-    buffer = io.BytesIO()
-    result_pil.save(buffer, format="JPEG")
-    st.download_button(
-        label="📥 Télécharger le résultat",
-        data=buffer.getvalue(),
-        file_name="resultat_detection.jpg",
-        mime="image/jpeg"
-    )
-
+    # ⛔ Bouton de téléchargement désactivé pour compatibilité Streamlit Cloud
+    st.markdown("📎 *Téléchargement désactivé pour cette version en ligne. Lancez l'application en local pour enregistrer l'image annotée.*")
