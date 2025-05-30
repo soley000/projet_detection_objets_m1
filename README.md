@@ -44,7 +44,7 @@ L’objectif est de développer un système de **détection d’objets en image*
 ### 🛠️ En local (optionnel)
 
 ```bash
-git clone https://github.com/tonpseudo/projet_detection_objets_m1.git
+git clone https://github.com/soley000/projet_detection_objets_m1.git
 cd projet_detection_objets_m1
 pip install -r requirements.txt
 streamlit run app.py
