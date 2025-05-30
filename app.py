@@ -5,7 +5,6 @@ import tensorflow as tf
 import tensorflow_hub as hub
 from ultralytics import YOLO
 import time
-from PIL import Image
 
 st.set_page_config(page_title="Détection d'Objets", layout="centered")
 
@@ -19,7 +18,7 @@ uploaded_file = st.file_uploader("📸 Importer une image", type=["jpg", "jpeg",
 
 # 🔍 Détection avec YOLOv8 depuis le hub Ultralytics
 def detect_yolo(image_bgr):
-    model = YOLO("yolov8n")  # ✅ téléchargement automatique du modèle
+    model = YOLO("yolov8n")  # ✅ modèle léger, téléchargement automatique
     results = model(image_bgr)[0]
     image_out = image_bgr.copy()
     for box in results.boxes.data:
@@ -58,7 +57,7 @@ def detect_ssd(image_bgr):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
     return image_out
 
-# 📥 Lancement si fichier image chargé
+# 📥 Si fichier image chargé
 if uploaded_file:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image_bgr = cv2.imdecode(file_bytes, 1)
@@ -74,7 +73,4 @@ if uploaded_file:
         duration = time.time() - start
 
     st.success(f"✅ Détection terminée en {duration:.2f} secondes")
-    st.image(image_detected, caption=f"📌 Résultat – {model_choice}", use_column_width=True)
-
-    # ⛔ Bouton de téléchargement désactivé pour compatibilité Streamlit Cloud
-    st.markdown("📎 *Téléchargement désactivé pour cette version en ligne. Lancez l'application en local pour enregistrer l'image annotée.*")
+    st.image(image_detected, caption=f" Résultat – {model_choice}", use_column_width=True)
