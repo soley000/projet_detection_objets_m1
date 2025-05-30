@@ -1,27 +1,25 @@
-# Projet M1 — Détection et reconnaissance d’objets avec Deep Learning
+# Projet M1 — Détection d’objets en image avec Deep Learning
 
 ## 📌 Contexte
 
-Ce petit projet étudiant est pour se former sur les outils de détection d'objet..  
-Il s’inscrit dans les thématiques de la vision par ordinateur et du deep learning.  
-L’objectif est de développer un système de **détection d’objets en image** à l’aide de **modèles pré-entraînés**.
+Ce projet étudiant vise à se former aux outils de **vision par ordinateur** et de **deep learning**. L’objectif est de développer une interface capable de détecter des objets dans des images à l’aide de **modèles pré-entraînés**.
 
 ---
 
 ## 🧠 Objectifs
 
-- 🎯 Réaliser la détection d’objets
-- 🧹 Filtrer les détections peu fiables (score de confiance)
-- 📊 Visualiser les résultats et télécharger l’image annotée
+- 🎯 Réaliser la détection d’objets à partir d’images importées
+- 🧹 Filtrer les détections selon un seuil de confiance réglable
+- 📊 Visualiser les résultats directement dans l’interface
 
 ---
 
 ## 🧰 Modèles utilisés
 
-| Modèle        | Caractéristiques |
-|---------------|------------------|
-| **YOLOv8n**   | Très rapide, léger, inférence en local |
-| **SSD MobileNet v2** | Plus lent, hébergé via TensorFlow Hub, bonne précision |
+| Modèle              | Caractéristiques                               |
+|---------------------|--------------------------------------------------|
+| **YOLOv8n**         | Léger, rapide, exécution locale avec Ultralytics |
+| **SSD MobileNet v2**| Chargé depuis TensorFlow Hub, bonne précision    |
 
 ---
 
@@ -35,29 +33,30 @@ L’objectif est de développer un système de **détection d’objets en image*
 
 ---
 
-##  Comment lancer l’application
+## ⚙️ Lancer l’application
 
-### 🔗 Depuis Streamlit Cloud (recommandé)
-
-> 📎 [Clique ici pour voir le projet en ligne](https://ton-lien.streamlit.app)
-
-### 🛠️ En local (optionnel)
+### ✅ En local (recommandé)
 
 ```bash
 git clone https://github.com/soley000/projet_detection_objets_m1.git
 cd projet_detection_objets_m1
 pip install -r requirements.txt
 streamlit run app.py
+```
+
+Une fois lancé, l’application s’ouvrira automatiquement dans votre navigateur à l’adresse http://localhost:8501
+
+### ⚠️ NB : Déploiement en ligne non supporté actuellement
+> L’application Streamlit Cloud peut générer une erreur front-end (JavaScript) avec certaines configurations. Il est donc conseillé de l’utiliser **en local uniquement**.
 
 ---
 
 ## 🧾 Fichiers du projet
 
 - `app.py` : interface Streamlit principale
-- `requirements.txt` : dépendances à installer
-- `README.md` : description du projet
-- `resultats/` : exemples d’images résultantes
-- `images/` : image(s) de test
+- `requirements.txt` : bibliothèques nécessaires
+- `README.md` : ce fichier
+- `images/` : dossier contenant image de test
 
 ---
 
@@ -66,7 +65,3 @@ streamlit run app.py
 Projet réalisé par **Rosette-Michèle**  
 Étudiante en Master 1 Intelligence Artificielle  
 **IA School – Groupe GEMA**
-
----
-
-
