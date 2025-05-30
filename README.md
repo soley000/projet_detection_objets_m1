@@ -49,3 +49,24 @@ cd projet_detection_objets_m1
 pip install -r requirements.txt
 streamlit run app.py
 
+---
+
+## 🧾 Fichiers du projet
+
+- `app.py` : interface Streamlit principale
+- `requirements.txt` : dépendances à installer
+- `README.md` : description du projet
+- `resultats/` : exemples d’images résultantes
+- `images/` : image(s) de test
+
+---
+
+## 👩🏽‍💻 Auteur·e
+
+Projet réalisé par **Rosette-Michèle**  
+Étudiante en Master 1 Intelligence Artificielle  
+**IA School – Groupe GEMA**
+
+---
+
+
