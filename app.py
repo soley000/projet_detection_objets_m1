@@ -4,21 +4,23 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
 from ultralytics import YOLO
+import tempfile
 import time
+from PIL import Image
 
 st.set_page_config(page_title="Détection d'Objets", layout="centered")
-
 st.title("🎯 Détection d'Objets – Projet M1")
+
 st.markdown("Choisissez un modèle, importez une image, ajustez le seuil, et observez les résultats.")
 
-# 🔘 Sélection du modèle et des paramètres
+# 🔘 Sélection du modèle et du seuil
 model_choice = st.selectbox("🔍 Choisir un modèle", ["YOLOv8", "SSD MobileNet"])
 seuil_confiance = st.slider("🎚️ Seuil de confiance", 0.0, 1.0, 0.5, 0.05)
 uploaded_file = st.file_uploader("📸 Importer une image", type=["jpg", "jpeg", "png"])
 
-# 🔍 Détection avec YOLOv8 depuis le hub Ultralytics
+# 🧠 Détection avec YOLOv8
 def detect_yolo(image_bgr):
-    model = YOLO("yolov8n")  # ✅ modèle léger, téléchargement automatique
+    model = YOLO("yolov8n")
     results = model(image_bgr)[0]
     image_out = image_bgr.copy()
     for box in results.boxes.data:
@@ -32,13 +34,13 @@ def detect_yolo(image_bgr):
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
     return image_out
 
-# 🔍 Détection avec SSD MobileNet depuis TensorFlow Hub
+# 🧠 Détection avec SSD MobileNet
 def detect_ssd(image_bgr):
     model = hub.load("https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2")
     image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
     image_tf = tf.convert_to_tensor(image_rgb, dtype=tf.uint8)
     image_resized = tf.image.resize_with_pad(image_tf, 320, 320)
-    image_input = tf.expand_dims(tf.cast(image_resized, tf.uint8), axis=0)
+    image_input = tf.expand_dims(image_resized, axis=0)
     results = model(image_input)
 
     boxes = results["detection_boxes"].numpy()[0]
@@ -57,20 +59,17 @@ def detect_ssd(image_bgr):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
     return image_out
 
-# 📥 Si fichier image chargé
+# 📸 Traitement principal
 if uploaded_file:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image_bgr = cv2.imdecode(file_bytes, 1)
 
-    st.image(image_bgr, caption="🖼️ Image d'origine", use_column_width=True)
-
+    # 🚀 Lancer la détection
     with st.spinner("🔍 Détection en cours..."):
         start = time.time()
-        if model_choice == "YOLOv8":
-            image_detected = detect_yolo(image_bgr)
-        else:
-            image_detected = detect_ssd(image_bgr)
+        image_detected = detect_yolo(image_bgr) if model_choice == "YOLOv8" else detect_ssd(image_bgr)
         duration = time.time() - start
 
     st.success(f"✅ Détection terminée en {duration:.2f} secondes")
-    st.image(image_detected, caption=f" Résultat – {model_choice}", use_column_width=True)
+    st.image(image_detected, caption=f"📌 Résultat – {model_choice}", use_column_width=True)
+
